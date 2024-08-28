@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
   const context = useContext(NoteContext);
-  const { userData } = context;
+  const { userData, fetchUserData } = context;
   const dropdownRef = useRef(null); // Reference to the dropdown menu
 
   const handleLogout = () => {
@@ -18,6 +18,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    fetchUserData();
     // Add event listener to close dropdown when clicking outside
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -93,7 +94,7 @@ const Navbar = () => {
                   aria-expanded={showDropdown}
                   onClick={toggleDropdown}
                 >
-                  {url === null ? (
+                  {url === undefined || null ? (
                     <i
                       className="bi bi-person-circle"
                       style={{ color: "#fff", fontSize: "1.5rem" }}
