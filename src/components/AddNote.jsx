@@ -69,53 +69,64 @@ const AddNote = () => {
   };
 
   return (
-    <div className="container my-3">
-      <h2>Add a Note</h2>
+    <div className="card-padded animate-fade-in">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-surface-900">Add a Note</h2>
+      </div>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ setFieldValue, values }) => (
-          <Form className="my-3">
-            <div className="mb-3">
-              <label htmlFor="title" className="form-label">Title</label>
+          <Form className="space-y-5">
+            <div>
+              <label htmlFor="title" className="label">Title</label>
               <Field
                 type="text"
-                className="form-control"
+                className="input"
                 id="title"
                 name="title"
               />
-              <ErrorMessage name="title" component="div" className="text-danger" />
+              <ErrorMessage name="title" component="div" className="mt-1.5 text-sm text-red-500" />
             </div>
-            <div className="mb-3">
-              <label htmlFor="description" className="form-label">Description</label>
+
+            <div>
+              <label htmlFor="description" className="label">Description</label>
               <Field
                 as="textarea"
-                className="form-control"
+                className="input resize-y min-h-[120px]"
                 id="description"
                 name="description"
-                placeholder="Write a description"
+                placeholder="Write a description..."
                 onChange={(e) => {
                   setFieldValue('description', e.target.value);
                   handleDescriptionChange(e);
                 }}
                 value={values.description}
               />
-              <ErrorMessage name="description" component="div" className="text-danger" />
+              <ErrorMessage name="description" component="div" className="mt-1.5 text-sm text-red-500" />
             </div>
-            <div className="mb-3">
-              <label htmlFor="tag" className="form-label">Tag</label>
+
+            <div>
+              <label htmlFor="tag" className="label">Tag</label>
               <Field
                 type="text"
-                className="form-control"
+                className="input"
                 id="tag"
                 name="tag"
-                placeholder="Tag"
+                placeholder="Tag (e.g., Work, Personal, Ideas)"
               />
             </div>
-            <div className="mb-3">
-              <button type="submit" className="btn btn-primary">Add Note</button>
+
+            <div className="pt-2">
+              <button type="submit" className="btn-primary">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Note
+              </button>
             </div>
           </Form>
         )}

@@ -1,14 +1,13 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import NoteContext from "./noteContext";
 import { toast } from "react-toastify";
 
 const NoteState = (props) => {
-  const host = "http://localhost:5000";
-  const notesInitial = [];
+  const host = import.meta.env.VITE_SERVER_URL;
   const [notes, setNotes] = useState([]);
   const [userData, setUserData] = useState(null);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const response = await fetch(`${host}/api/auth/getuser`, {
         method: "POST",
@@ -26,12 +25,10 @@ const NoteState = (props) => {
     } catch (err) {
       toast.error(err.message);
     }
-  };
-
-
+  }, [host]);
 
   // Get All Notes
-  const getNotes = async () => {
+  const getNotes = useCallback(async () => {
     try {
       const response = await fetch(`${host}/api/notes/fetchallnotes`, {
         method: "GET",
@@ -44,12 +41,12 @@ const NoteState = (props) => {
       setNotes(json);
     } catch (error) {
       console.error("Error fetching notes:", error);
-      // Optionally, you can handle the error here (e.g., display an error message)
+      toast.error("Failed to fetch notes");
     }
-  };
+  }, [host]);
 
   // Add a Note
-  const addNote = async (title, description, tag) => {
+  const addNote = useCallback(async (title, description, tag) => {
     try {
       const response = await fetch(`${host}/api/notes/addnote`, {
         method: "POST",
@@ -72,10 +69,10 @@ const NoteState = (props) => {
     } catch (error) {
       toast.error(error.message || "An error occurred.");
     }
-  };   
+  }, [host]);
 
   // Delete a Note
-  const deleteNote = async (id) => {
+  const deleteNote = useCallback(async (id) => {
     try {
       const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
         method: "DELETE",
@@ -95,12 +92,11 @@ const NoteState = (props) => {
 
     } catch (error) {
       toast.error("Error deleting note:", error);
-      // Optionally, you can handle the error here (e.g., display an error message)
     }
-  };
+  }, [host, notes]);
 
   // Edit a Note
-  const editNote = async (id, title, description, tag) => {
+  const editNote = useCallback(async (id, title, description, tag) => {
     try {
       const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
         method: "PUT",
@@ -126,11 +122,8 @@ const NoteState = (props) => {
       
     } catch (error) {
       toast.error(error.message);
-      // Optionally, you can handle the error here (e.g., display an error message)
     }
-  };
-  
-
+  }, [host, notes]);
   
   return (
     <NoteContext.Provider
